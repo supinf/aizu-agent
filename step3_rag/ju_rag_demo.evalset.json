@@ -1,0 +1,127 @@
+{
+  "eval_set_id": "ju_rag_demo",
+  "name": "令和の什の掟デモ評価セット",
+  "description": "ADK WebUI / adk eval で軌跡 (ツール呼び出し) と回答品質を確認するためのデモ用ケース。knowledge.json 作成後に利用する。",
+  "eval_cases": [
+    {
+      "eval_id": "search_ju_no_okite",
+      "session_input": {
+        "app_name": "step3_rag",
+        "user_id": "demo_user",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "inv-ju-okite-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "什の掟の条文を教えて。出典もお願い。"
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "什の掟には「ならぬことはならぬものです」などが含まれ、あいづっこ宣言の関連資料で紹介されてそうだなし。"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "search_ju_knowledge",
+                "args": {
+                  "query": "什の掟 条文"
+                }
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "search_youth_outflow",
+      "session_input": {
+        "app_name": "step3_rag",
+        "user_id": "demo_user",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "inv-youth-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "会津若松市の若者の人口流出について、公式資料ではどう整理されている？"
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "進学や就職を契機とした若者の流出が人口減少の要因として整理されているべ。第7次計画や第8次素案を参照すっぺ。"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "search_ju_knowledge",
+                "args": {
+                  "query": "若者 人口流出"
+                }
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "search_smartcity",
+      "session_input": {
+        "app_name": "step3_rag",
+        "user_id": "demo_user",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "inv-smartcity-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "スマートシティ会津若松って何？どんな視点で進めてるの？"
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "ICTを活用した持続可能で快適なまちづくりの取組の総称で、地域活力・生活利便・まちの見える化などの視点があんだよ。"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "search_ju_knowledge",
+                "args": {
+                  "query": "スマートシティ会津若松 概要"
+                }
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ]
+    }
+  ]
+}

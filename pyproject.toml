@@ -1,0 +1,31 @@
+[project]
+name = "aizu-agent"
+version = "0.1.0"
+description = "会津若松市「令和の什の掟」AI エージェント ライブデモ"
+readme = "README.md"
+# Cloud Run 実行環境に合わせる。`adk deploy cloud_run` が生成する Dockerfile は
+# `FROM python:3.11-slim` 固定 (google/adk/cli/cli_deploy.py の _DOCKERFILE_TEMPLATE) のため、
+# ここを 3.12+ にするとコンテナ内の pip install が解決できず Cloud Build が失敗する。
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk==2.6.1",
+  "google-genai==2.16.0",
+  "faiss-cpu==1.14.3",
+  # numpy 2.5 系は requires-python >=3.12 で cp311 wheel が無い (2.4 系が 3.11 対応の最終)
+  "numpy>=2.4,<2.5",
+  "httpx==0.28.1",
+  "beautifulsoup4==4.15.0",
+  "pypdf==6.14.2",
+  "python-dotenv==1.2.2",
+  "PyYAML==6.0.3",
+]
+
+# ローカル検証専用。`uv export --no-dev` で除外されるため
+# Cloud Run 用 requirements.txt には含まれない (イメージを太らせない)。
+[dependency-groups]
+dev = [
+  "google-adk[eval]==2.6.1",
+]
+
+[tool.uv]
+package = false

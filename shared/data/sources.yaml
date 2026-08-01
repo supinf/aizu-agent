@@ -1,0 +1,66 @@
+# 公式ソース定義 (URL のみリポジトリに含める)
+# 本文・PDF はデモ時に scripts/fetch_sources.py で取得し、.gitignore 対象に保存する。
+#
+# 注意:
+# - 会津若松市公式サイトのコンテンツには著作権があります。
+# - 取得した原文・抽出テキスト・生成した knowledge.json はコミットしないでください。
+# - デモ用途のローカル利用・公演中のデータ作成を想定しています。
+#
+# 総合計画について (2026-08-01 時点) :
+# - 施行中の最上位計画は「第7次総合計画」 (〜令和8 / 2026 年度)
+# - 「第8次総合計画」は令和9 (2027) 年度開始予定で、基本構想・基本計画は素案段階
+#    (2026年6〜7月にパブコメ実施)。デモでは両方を取り込む。
+
+sources:
+  - id: ju_no_okite
+    title: 什の掟 (あいづっこ宣言リーフレットで紹介される伝統的文言)
+    kind: curated
+    notes: >
+      会津若松市公式「あいづっこ宣言」関連資料で紹介されている什の掟の文言。
+      江戸時代の会津藩・日新館入学前の心得として伝えられる。
+
+  - id: aidzukko_declaration
+    title: 「あいづっこ宣言」トップページ
+    kind: html
+    url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2007080601668/
+    notes: 什の掟を踏まえた現代の青少年健全育成指針。
+
+  - id: comprehensive_plan_prologue_pdf
+    title: 第 7 次総合計画 プロローグ「2020 年代の会津若松市の課題」 (施行中)
+    kind: pdf
+    url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2016110400058/file_contents/003_prologue.pdf
+    page_url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2016110400058/
+    notes: 若者流出・産業構造変化など地方創生に向けた課題整理 (現行計画)。
+
+  - id: comprehensive_plan_8th_draft_pdf
+    title: 第 8 次総合計画 基本構想及び基本計画 (素案)
+    kind: pdf
+    url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2026061200010/file_contents/keikaku_soan.pdf
+    page_url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2026061200010/
+    notes: >
+      令和 9 ~ 18 年度向けの次期計画素案。人口減少・若者や女性に選ばれるまちづくり等。
+      まだ施行前の素案である点に注意。
+
+  - id: smartcity_overview
+    title: 「スマートシティ会津若松」について
+    kind: html
+    url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2013101500018/
+    notes: スマートシティの経過・3 つの視点・位置づけ。
+
+  - id: smartcity_fields
+    title: 「スマートシティ会津若松」で実施している各分野の取組
+    kind: html
+    url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2023072400026/
+    notes: ヘルスケア・教育・防災・観光などの分野取組一覧。
+
+  - id: smartcity_digital_garden
+    title: デジタル田園都市国家構想プロジェクト (共助型スマートシティ)
+    kind: html
+    url: https://www.city.aizuwakamatsu.fukushima.jp/docs/2023070600046/
+    notes: デジタル田園都市国家構想交付金 TYPE3 採択とデータ連携の取組。
+
+  - id: smartcity_category
+    title: スマートシティ (カテゴリページ)
+    kind: html
+    url: https://www.city.aizuwakamatsu.fukushima.jp/category/bunya/shinotorikumi/smartcity/
+    notes: 市のスマートシティ関連新着・導線。

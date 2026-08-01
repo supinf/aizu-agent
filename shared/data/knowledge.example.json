@@ -1,0 +1,27 @@
+{
+  "generated_at": "EXAMPLE_ONLY_DO_NOT_USE_IN_DEMO",
+  "disclaimer": "このファイルはスキーマ説明用です。実データは scripts/build_knowledge.py で生成し、knowledge.json (gitignore) として利用します。",
+  "chunks": [
+    {
+      "id": "ju_no_okite",
+      "title": "什の掟 (伝統的文言)",
+      "text": "一、年長者の言うことに背いてはなりませぬ ... ならぬことはならぬものです",
+      "source": "会津若松市 あいづっこ宣言関連資料で紹介される什の掟",
+      "url": "https://www.city.aizuwakamatsu.fukushima.jp/docs/2007080601668/"
+    },
+    {
+      "id": "challenge_youth_outflow",
+      "title": "若者層の人口流出 (課題)",
+      "text": " (fetch + build で公式 PDF から抽出した要約チャンクが入る)",
+      "source": "会津若松市第7次総合計画 プロローグ",
+      "url": "https://www.city.aizuwakamatsu.fukushima.jp/docs/2016110400058/file_contents/003_prologue.pdf"
+    },
+    {
+      "id": "smartcity_overview",
+      "title": "スマートシティ会津若松の概要",
+      "text": " (fetch + build で公式 HTML から抽出した要約チャンクが入る)",
+      "source": "会津若松市「スマートシティ会津若松」について",
+      "url": "https://www.city.aizuwakamatsu.fukushima.jp/docs/2013101500018/"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "eval_set_id": "persona_demo",
+  "name": "会津弁ペルソナ確認用",
+  "description": "Step2 でシステムプロンプト注入後の口調・規範言及をざっと確認するデモ用ケース。厳密一致ではなく、WebUI での対話比較・イベント確認向け。",
+  "eval_cases": [
+    {
+      "eval_id": "persona_tone",
+      "session_input": {
+        "app_name": "step2_persona",
+        "user_id": "demo_user",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "inv-persona-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "若者が地域に関わるとき、どんな心得が大事？"
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "ならぬことはならぬ、という心得を大事にしつつ、弱い人を守り、会津を誇って一歩踏み出すのがいいんでない？"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          }
+        }
+      ]
+    }
+  ]
+}

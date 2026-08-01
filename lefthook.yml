@@ -1,0 +1,39 @@
+# 手動で全チェックをまとめて実行する場合:
+#   lefthook run pre-commit --all-files              # pre-commit の全ジョブをステージ有無に関係なく実行
+#   lefthook run pre-commit --all-files --job ruff   # 特定ジョブのみ実行 (--job は複数指定可)
+#   lefthook run pre-commit --all-files -f           # --force: 対象ファイルが無いジョブもスキップせず実行
+pre-commit:
+  parallel: true
+  jobs:
+    # Secret scanning — staged files only, runs first before anything else
+    - name: gitleaks
+      tags: [security]
+      run: |
+        if ! command -v gitleaks >/dev/null 2>&1; then
+          echo "[skip] gitleaks not installed"
+          exit 0
+        fi
+        gitleaks protect --staged --redact --exit-code 1
+
+    # Python linting/format — only when .py files are staged
+    - name: ruff
+      tags: [python, lint]
+      glob: "**/*.py"
+      run: |
+        if ! command -v uvx >/dev/null 2>&1; then
+          echo "[skip] uvx not installed. Run: curl -LsSf https://astral.sh/uv/install.sh | sh"
+          exit 0
+        fi
+        uvx ruff check {staged_files}
+        uvx ruff format --check {staged_files}
+
+    # ShellCheck
+    - name: shellcheck
+      tags: [lint, shell]
+      glob: "**/*.sh"
+      run: |
+        if ! command -v shellcheck >/dev/null 2>&1; then
+          echo "[skip] shellcheck not installed. Run: apt install shellcheck / brew install shellcheck"
+          exit 0
+        fi
+        shellcheck -x --severity=warning {staged_files}

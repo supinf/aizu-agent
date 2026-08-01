@@ -1,0 +1,16 @@
+{
+  "_comment": [
+    "adk eval の合否基準。--config_file_path で指定する。",
+    "既定値 (tool_trajectory_avg_score=1.0 / response_match_score=0.8) は本エージェントには合わない:",
+    "  - tool_trajectory_avg_score はツール引数の完全一致を要求する",
+    "    (google/adk/evaluation/trajectory_evaluator.py の actual.args == expected.args)。",
+    "    検索クエリは LLM が毎回自由に生成するため原理的に安定せず、合否ゲートにできない。",
+    "  - response_match_score は参照文との ROUGE ベース。会津弁の自由記述では実測 0.20〜0.28 程度で、",
+    "    0.8 は到達不可能。",
+    "そのため回帰検知に使える現実的な下限のみを残している。",
+    "ツールが実際に呼ばれた軌跡は WebUI の Events タブで目視するのが本デモの主目的。"
+  ],
+  "criteria": {
+    "response_match_score": 0.15
+  }
+}
