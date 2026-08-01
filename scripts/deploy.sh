@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# step3_rag (+ shared) を ADK 推奨の `adk deploy cloud_run` でデプロイする
+# step1_hello または step3_rag (+ shared) を ADK 推奨の `adk deploy cloud_run` でデプロイする
 #  (APIキー不使用 / Vertex AI + ADC)
+#
+# 使い方:
+#   ./scripts/deploy.sh              # デフォルト: step3_rag をデプロイ
+#   ./scripts/deploy.sh step1_hello  # step1_hello をデプロイ
 #
 # 注意: 本スクリプトはライブデモ用に Cloud Run サービスを *一般公開* します
 #       (--allow-unauthenticated)。URL を知る全員が Gemini を呼べる状態になり、
@@ -10,6 +14,15 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+
+STEP="${1:-step3_rag}"
+case "$STEP" in
+  step1_hello|step3_rag) ;;
+  *)
+    echo "ERROR: 不明なデプロイ対象です: $STEP (step1_hello または step3_rag を指定してください)"
+    exit 1
+    ;;
+esac
 
 : "${GOOGLE_CLOUD_PROJECT:?GOOGLE_CLOUD_PROJECT を設定してください}"
 REGION="${GOOGLE_CLOUD_REGION:-asia-northeast1}"
@@ -21,7 +34,7 @@ EMBED_NAME="${EMBEDDING_MODEL:-gemini-embedding-001}"
 MAX_INSTANCES="${MAX_INSTANCES:-3}"
 MIN_INSTANCES="${MIN_INSTANCES:-0}"
 
-if [[ ! -f "shared/data/knowledge.json" ]]; then
+if [[ "$STEP" == "step3_rag" && ! -f "shared/data/knowledge.json" ]]; then
   echo "ERROR: shared/data/knowledge.json がありません。"
   echo "先にデモ用データを作成してください:"
   echo "  uv run python scripts/fetch_sources.py"
@@ -47,16 +60,21 @@ cleanup() { rm -rf "$STAGE"; }
 trap cleanup EXIT
 
 echo "[stage] $STAGE"
-# adk deploy は agent ディレクトリ単位でパッケージするため shared を同梱する
-mkdir -p "$STAGE/step3_rag"
-cp -R step3_rag/. "$STAGE/step3_rag/"
-cp -R shared "$STAGE/step3_rag/shared"
-rm -rf "$STAGE/step3_rag/shared/data/raw"
-cp requirements.txt "$STAGE/step3_rag/requirements.txt"
+# adk deploy は agent ディレクトリ単位でパッケージする
+mkdir -p "$STAGE/$STEP"
+cp -R "$STEP/." "$STAGE/$STEP/"
+
+if [[ "$STEP" == "step3_rag" ]]; then
+  # step3_rag は shared (RAG 検索ツール等) に依存するため同梱する
+  cp -R shared "$STAGE/$STEP/shared"
+  rm -rf "$STAGE/$STEP/shared/data/raw"
+fi
+
+cp requirements.txt "$STAGE/$STEP/requirements.txt"
 
 # google-genai 2.x の正式な環境変数は GOOGLE_GENAI_USE_ENTERPRISE。
 # (GOOGLE_GENAI_USE_VERTEXAI は後方互換の旧名。両方あると ENTERPRISE が優先される)
-cat > "$STAGE/step3_rag/.env" <<EOF
+cat > "$STAGE/$STEP/.env" <<EOF
 GOOGLE_GENAI_USE_ENTERPRISE=true
 GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
 GOOGLE_CLOUD_LOCATION=${MODEL_LOCATION}
@@ -64,6 +82,7 @@ GEMINI_MODEL=${MODEL_NAME}
 EMBEDDING_MODEL=${EMBED_NAME}
 EOF
 
+echo "[deploy] step=${STEP}"
 echo "[deploy] project=${GOOGLE_CLOUD_PROJECT} region=${REGION} service=${SERVICE_NAME}"
 echo "[deploy] model=${MODEL_NAME} location=${MODEL_LOCATION}"
 echo "[deploy] instances: min=${MIN_INSTANCES} max=${MAX_INSTANCES}"
@@ -81,7 +100,7 @@ fi
   --region="$REGION" \
   --service_name="$SERVICE_NAME" \
   --with_ui \
-  "$STAGE/step3_rag" \
+  "$STAGE/$STEP" \
   -- \
   --allow-unauthenticated \
   --min-instances="$MIN_INSTANCES" \

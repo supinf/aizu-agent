@@ -43,17 +43,15 @@ gcloud auth application-default set-quota-project "$GOOGLE_CLOUD_PROJECT"
 
 ## デモ中のデータ作成
 
-市公式ドキュメントの本文・PDF 抽出結果・生成済み `knowledge.json` は **gitignore** しています。
+市公式ドキュメントは **gitignore** しています。
 リポジトリに含まれるのは URL 定義 (`shared/data/sources.yaml`) とスキーマ例のみです。
 
 ```bash
 uv run python scripts/fetch_sources.py
 uv run python scripts/build_knowledge.py
-# デモ向けに絞る場合:
-# uv run python scripts/build_knowledge.py --max-chunks 3
 ```
 
-## ローカル起動 (ADK WebUI)
+## ローカル起動
 
 ```bash
 uv run adk web
@@ -76,44 +74,24 @@ uv run adk eval step3_rag step3_rag/ju_rag_demo.evalset.json --config_file_path 
 uv run adk eval step2_persona step2_persona/persona_demo.evalset.json --config_file_path eval_config.json
 ```
 
-`--config_file_path` を省くと ADK の既定基準
-(`tool_trajectory_avg_score=1.0` / `response_match_score=0.8`) が使われ、**必ず失敗します**。
-既定の軌跡スコアはツール引数の完全一致を要求しますが、検索クエリは LLM が毎回自由に生成するためです。
-また応答一致スコアは会津弁の自由記述では実測 0.20〜0.28 程度で、0.8 には到達しません。
-`eval_config.json` には回帰検知に使える現実的な下限のみを設定しています
-(ツール呼び出しの軌跡そのものは WebUI の Events タブで目視するのが本デモの主目的)。
-
 ### おすすめ質問
 
-1. Step1/2: 「会津若松で若者が地域に関わるには？」
+1. Step1/2/3: 「会津若松市にはどんな課題がある？」
 2. Step3: 「什の掟を今のまちづくりにどう活かす？」
-3. Step3: 「スマートシティ会津若松って何？」
-4. Step3: 「若者の人口流出について、第 7 次と第 8 次素案ではどう書かれている？」
+3. Step3: 「若者の人口流出について、会津若松市総合計画第 7 次と第 8 次素案では、それぞれどう書かれている？」
 
-## Cloud Run デプロイ
-
-### デプロイ
+## Cloud Run へのデプロイ
 
 ```bash
 export GOOGLE_CLOUD_PROJECT=your-gcp-project-id
 export GOOGLE_CLOUD_LOCATION=global
 export GOOGLE_CLOUD_REGION=asia-northeast1
 
-./scripts/deploy.sh
+./scripts/deploy.sh             # デフォルト: step3_rag をデプロイ
+./scripts/deploy.sh step1_hello
 ```
 
 事前に Vertex AI API 有効化と、実行 SA への `roles/aiplatform.user` 付与が必要です。
-
-### 公開範囲と後片付け
-
-参加者にその場で触ってもらうため、`--allow-unauthenticated` で**認証なしの一般公開**として
-デプロイします。URL を知る全員が Gemini を呼べる状態になり、利用量はプロジェクトに課金されます。
-
-**デモ終了後は削除してください:**
-
-```bash
-gcloud run services delete "$SERVICE_NAME" --region "$GOOGLE_CLOUD_REGION" --project "$GOOGLE_CLOUD_PROJECT"
-```
 
 ## ディレクトリ
 
